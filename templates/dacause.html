@@ -1,0 +1,312 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+
+    <script type="text/javascript" src="{% static 'js/rem.js' %}"></script>
+    <script src="{% static 'js/echarts.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        .bg {
+            background-image: url("{% static 'images/bg_report.png' %}");
+            background-repeat: no-repeat;
+            background-size: 95% 95%;
+            position: relative;
+        }
+
+        .titlebox {
+            width: 415px;
+            height: 30px;
+            background-image: url("{% static 'images/bg_top.png' %}");
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            opacity: .6;
+            /* background-color: #fff; */
+
+            position: absolute;
+            z-index: 3;
+            font-size: 16px;
+            color: #2ab0e5;
+            text-align: center;
+        }
+
+        .titlebox:nth-child(1) {
+            top: 7%;
+            left: 3%;
+        }
+
+        .titlebox:nth-child(2) {
+            top: 53%;
+            left: 3%;
+        }
+
+        .titlebox:nth-child(3) {
+            top: 7%;
+            left: 35%;
+        }
+
+        .titlebox:nth-child(4) {
+            top: 53%;
+            left: 35%;
+        }
+
+        .titlebox:nth-child(5) {
+            top: 7%;
+            left: 68%;
+        }
+
+        .titlebox:nth-child(6) {
+            top: 53%;
+            left: 68%;
+        }
+
+        .damenu {
+            z-index: 3;
+            position: absolute;
+            top: 50px;
+            right: 0;
+            width: 40px;
+            height: 150px;
+
+        }
+
+
+        .damenu:hover {
+            width: 150px;
+            cursor: pointer;
+        }
+
+        .menulogo {
+            background-color: #367c98;
+            width: 100%;
+            height: 40px;
+            overflow: hidden;
+            /* transition: width 0.3s ease-in-out; */
+            border-radius: 10% 0 0 10%;
+        }
+
+        .menulogo img {
+            float: left;
+            margin-left: 3px;
+            margin-top: 1px;
+            width: 35px;
+            height: 35px;
+        }
+
+        .mainbtn {
+            margin-left: 40px;
+            width: 0;
+            height: 40px;
+            background-color: #367c98;
+            overflow: hidden;
+
+        }
+
+        .btna {
+            width: 110px;
+            overflow: hidden;
+        }
+
+
+        .damenu button {
+            margin-left: 6px;
+            margin-top: 8px;
+            color: white;
+            float: left;
+            font-size: 15px;
+            width: 100px;
+            height: 25px;
+            border: none;
+            border-radius: 10%;
+            background-color: #3CCEC6;
+        }
+    </style>
+    <title>台风灾害</title>
+</head>
+
+<body style="visibility: hidden;">
+    <div class="container-flex" tabindex="0" hidefocus="true">
+        <div class="titlebox"> <strong>历年台风经济损失</strong> </div>
+        <div class="titlebox"> <strong>历年平均经济损失</strong> </div>
+        <div class="titlebox"> <strong>历年台风生成数量</strong> </div>
+        <div class="titlebox"> <strong>历年最高强度均值</strong> </div>
+        <div class="titlebox"> <strong>历年死亡失踪数</strong> </div>
+        <div class="titlebox"> <strong>历年平均死亡失踪</strong> </div>
+
+        <div class="damenu">
+            <div class="menulogo">
+                <img src="{% static 'images/菜单.png' %}" alt="">
+                <button class="backmain"> <strong>主页面</strong> </button>
+            </div>
+            <div class="mainbtn">
+                <button class="backknow"> <strong>台风知识</strong> </button>
+            </div>
+
+
+        </div>
+        <div class="box-left leftbox">
+
+            <div id="dleft-top" class="bg" style="height: 410px;margin-top:45px">
+            </div>
+
+            <div id="dleft-center" class="bg" style="height: 410px;margin-top:25px">
+            </div>
+        </div>
+        <div class="box-center centerbox">
+            <div id="dcenter-top" class="bg" style="height: 410px;margin-top:45px">
+            </div>
+            <div id="dcenter-center" class="bg" style="height: 410px;margin-top:25px">
+            </div>
+        </div>
+        <div class="box-right rightbox">
+            <div id="dright-top" class="bg" style="height: 410px;margin-top:45px">
+            </div>
+            <div id="dright-center" class="bg" style="height: 410px;margin-top:25px">
+            </div>
+        </div>
+    </div>
+
+</body>
+<script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/echarts.min.js' %}"></script>
+<script>
+    var chart1 = echarts.init(document.getElementById('dleft-top'));
+    var chart4 = echarts.init(document.getElementById('dleft-center'));
+    var chart3 = echarts.init(document.getElementById('dcenter-top'));
+    var chart6 = echarts.init(document.getElementById('dcenter-center'));
+    var chart2 = echarts.init(document.getElementById('dright-top'));
+    var chart5 = echarts.init(document.getElementById('dright-center'));
+    const urlMoney = `http://127.0.0.1:8000/money/`;
+    const urlPeople = `http://127.0.0.1:8000/people/`;
+    const urlyearnum = `http://127.0.0.1:8000/yearnum/`;
+    const urlMoneymean = `http://127.0.0.1:8000/moneymean/`;
+    const urlPeoplemean = `http://127.0.0.1:8000/peoplemean/`;
+    const urlIntensity = `http://127.0.0.1:8000/Intensity/`;
+    const damenu = document.querySelector('.damenu');
+    const mainbtn = document.querySelector('.mainbtn');
+
+    damenu.addEventListener('mouseover', function () {
+        damenu.classList.add('hover');
+        mainbtn.classList.add('btna');
+
+    });
+
+    damenu.addEventListener('mouseout', function () {
+        damenu.classList.remove('hover');
+        mainbtn.classList.remove('btna');
+
+    });
+    $(".backmain").click(function () {
+        window.location = "{% url 'index' %}"
+    })
+    $(".backknow").click(function () {
+        window.location = "{% url 'knowledge' %}"
+    })
+    fetch(urlIntensity)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            const years = Object.keys(data);
+            const inten = Object.values(data);
+            var option = getchart("级", years, inten)
+            chart6.setOption(option);
+        })
+    fetch(urlPeoplemean)
+        .then(response => response.json())
+        .then(data => {
+            const years = Object.keys(data);
+            const averdeath = Object.values(data);
+            var option = getchart("人", years, averdeath)
+            chart5.setOption(option);
+        })
+    fetch(urlMoneymean)
+        .then(response => response.json())
+        .then(data => {
+            const years = Object.keys(data);
+            const averprice = Object.values(data);
+            var option = getchart("亿", years, averprice)
+            chart4.setOption(option);
+        })
+    fetch(urlyearnum)
+        .then(response => response.json())
+        .then(data => {
+            const years = Object.keys(data);
+            const number = Object.values(data);
+            var option = getchart("亿", years, number)
+            chart3.setOption(option);
+        })
+    fetch(urlPeople)
+        .then(response => response.json())
+        .then(data => {
+            const years = Object.keys(data);
+            const people = Object.values(data);
+            var option = getchart("人", years, people)
+            chart2.setOption(option);
+        })
+
+    fetch(urlMoney)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            const years = Object.keys(data);
+            const prices = Object.values(data);
+            var option = getchart("亿", years, prices)
+            chart1.setOption(option);
+        })
+
+    function getchart(dan, years, ydata) {
+        var option = {
+            title: {
+                text: "",
+
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            xAxis: {
+                type: 'category',
+                data: years,
+                axisLabel: {
+                    color: '#3a8be1' // 设置 x 轴文本颜色为灰色
+                }
+
+            },
+            yAxis: {
+                name: "单位："+dan,
+                nameTextStyle: {
+                    color: '#3a8be1',
+                    fontSize:14
+                },
+                type: 'value',
+                axisLabel: {
+                    color: '#3a8be1', // 设置 x 轴文本颜色为灰色
+                    formatter: '{value} '
+                }
+            },
+            series: [{
+                // name: '亿',
+                data: ydata,
+                type: 'line',
+                color: '#72edf6'
+            }]
+        };
+        return option;
+    }
+</script>
+<script type="text/javascript">
+    $('document').ready(function () {
+        $("body").css('visibility', 'visible');
+        var localData = [$('#teacher').val(), $('#start').val() + '/' + $('#end').val(), $('#leader').val()]
+        localStorage.setItem("data", localData);
+
+    })
+</script>
+
+
+</html>

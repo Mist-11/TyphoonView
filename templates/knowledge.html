@@ -1,0 +1,430 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <script type="text/javascript" src="{% static 'js/rem.js' %}"></script>
+    <script src="{% static 'js/echarts.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        .knowcontain {
+            width: 100%;
+            height: 100%;
+        }
+
+        .damenu {
+            z-index: 3;
+            position: absolute;
+            top: 50px;
+            right: 0;
+            width: 40px;
+            height: 150px;
+
+        }
+
+
+        .damenu:hover {
+            width: 150px;
+            cursor: pointer;
+        }
+
+        .menulogo {
+            background-color: #367c98;
+            width: 100%;
+            height: 40px;
+            overflow: hidden;
+            /* transition: width 0.3s ease-in-out; */
+            border-radius: 10% 0 0 10%;
+        }
+
+        .menulogo img {
+            float: left;
+            margin-left: 3px;
+            margin-top: 1px;
+            width: 35px;
+            height: 35px;
+        }
+
+        .mainbtn {
+            margin-left: 40px;
+            width: 0;
+            height: 40px;
+            background-color: #367c98;
+            overflow: hidden;
+
+        }
+
+        .btna {
+            width: 110px;
+            overflow: hidden;
+        }
+
+
+        .damenu button {
+            margin-left: 6px;
+            margin-top: 8px;
+            color: white;
+            float: left;
+            font-size: 15px;
+            width: 100px;
+            height: 25px;
+            border: none;
+            border-radius: 10%;
+            background-color: #3CCEC6;
+        }
+
+        .top-box {
+            width: 100%;
+            height: 30px;
+            background: url("{% static 'images/bg_top.png' %}") center bottom no-repeat;
+            font-size: 30px;
+            text-align: center;
+            padding: 12px 0 16px 0;
+            display: block;
+            color: aliceblue;
+        }
+
+        .sidetitle {
+            position: relative;
+            width: 100%;
+            height: 135px;
+        }
+
+        .sidetitle:hover {
+            cursor: pointer;
+        }
+
+        .line1 {
+            position: absolute;
+            z-index: 3;
+            left: 0;
+            top: 0;
+            width: 41px;
+            height: 29px;
+            background: url("{% static 'images/logoline1.png' %}") 50% 50% no-repeat;
+        }
+
+        .circle {
+            width: 121px;
+            height: 121px;
+            position: absolute;
+            z-index: 1;
+            left: 14px;
+            top: 0px;
+            background: url("{% static 'images/report02.png' %}") 50% 50% no-repeat;
+
+        }
+
+        .move {
+            animation: spin 2s infinite linear;
+        }
+
+        .line2 {
+            position: absolute;
+            z-index: 3;
+            left: 111px;
+            top: 91px;
+            width: 152px;
+            height: 26px;
+            background: url("{% static 'images/logoline2.png' %}") 50% 50% no-repeat;
+        }
+
+        .cirtitle {
+            color: rgb(230, 230, 230);
+            font-size: 20px;
+            position: absolute;
+            z-index: 3;
+            left: 25px;
+            top: 49px;
+        }
+
+        .bigcon {
+            margin-top: 30px;
+
+            width: 80%;
+            height: 80%;
+            background-image: url("{% static 'images/center01.png' %}");
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+        }
+
+        .conbox {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            z-index: 2;
+            border: 2px solid #032d60;
+            box-shadow: inset 0 0 30px #07417a;
+            position: relative;
+
+        }
+
+        .bigcon {
+            color: white;
+            font-size: 18px;
+        }
+
+
+        .left,
+        .bigcon {
+            float: left;
+        }
+
+        .left {
+            width: 263px;
+            height: 87%;
+            margin-top: 30px;
+        }
+
+        .side-box {
+            margin-top: 98px;
+            margin-left: -22px;
+            width: 293px;
+            height: 280px;
+            background: url("{% static 'images/bg01rightarea.png' %}") right bottom no-repeat;
+
+        }
+
+        .introduce,.kind,.goobad,.protation {
+            color: white;
+            font-size: 18px;
+            display: none;
+            margin: auto;
+            margin-top: 20px;
+            width: 80%;
+        }
+        .introduce{
+            display: block;
+        }
+
+        .ac {
+            background-color: #fff;
+        }
+    </style>
+    <title>台风知识</title>
+</head>
+
+<body style="visibility: hidden;">
+    <div class="container-flex " tabindex="0" hidefocus="true">
+        <div class="knowcontain">
+            <div class="damenu">
+                <div class="menulogo">
+                    <img src="{% static 'images/菜单.png' %}" alt="">
+                    <button class="backmain"> <strong>主页面</strong> </button>
+                </div>
+                <div class="mainbtn">
+                    <button class="backknow"> <strong>台风灾害</strong> </button>
+                </div>
+
+
+            </div>
+
+            <h1 class="top-box">
+                <strong>台风知识</strong>
+            </h1>
+            <div class="left">
+                <div class="sidetitle " id="intro">
+                    <div class="line1"></div>
+                    <div class="circle move"></div>
+                    <h1 class="cirtitle"> <strong>台风基本介绍</strong> </h1>
+                    <div class="line2"></div>
+                </div>
+                <div class="sidetitle" id="kin">
+                    <div class="line1"></div>
+                    <div class="circle"></div>
+                    <h1 class="cirtitle"> <strong>台风种类</strong> </h1>
+                    <div class="line2"></div>
+                </div>
+                <div class="sidetitle" id="gb">
+                    <div class="line1"></div>
+                    <div class="circle"></div>
+                    <h1 class="cirtitle"> <strong>台风利弊</strong> </h1>
+                    <div class="line2"></div>
+                </div>
+                <div class="sidetitle" id="pro">
+                    <div class="line1"></div>
+                    <div class="circle"></div>
+                    <h1 class="cirtitle"> <strong>防台措施</strong> </h1>
+                    <div class="line2"></div>
+                </div>
+            </div>
+            <div class="bigcon">
+                <div class="conbox ">
+                    <div class="introduce">
+                        &nbsp; &nbsp;[ <strong>台风介绍</strong> ] 发生在热带海洋上强烈的暖心气旋性涡旋，是一种热带气旋。
+                        台风的水平尺度约几百公里至上千公里,铅直尺度可从地面直达平流层低层,是一种深厚的天气系统。强风引起的巨大海浪,可对海洋船舶造成很大破坏；当台风移近海岸时，狂风可引起大范围巨大的海潮，冲击沿海城镇。台风中心经过的地区常有大暴雨或特大暴雨,日雨量可高达1600毫米,造成大范围洪涝。
+                        各地对台风的称呼和强弱划分各不相同。发生在北太平洋西部和南海的习惯上称为台风。发生在北太平洋东部和大西洋的，风力在12级以上的称为飓风。
+                        <br> <br> &nbsp; &nbsp;[ <strong>台风命名规则</strong> ]
+                        由于沿岸国家众多，在出现国际统一命名规则前，各国都有自己的一套台风命名方式，导致有些混乱对此，世界气象组织下属台风委员会于1997年召开会议，决定自2000年起对西北太平洋和南海生成的热带气旋采用新的统一命名法。台风名字由中国、日本、美国、泰国、韩国、中国香港、中国澳门等14个国家和地区提供，每个国家（地区）提出10个，最终形成了包括140个台风名字的命名表。此后，台风的名字就根据这个表按照规定的顺序循环使用。当西北太平洋或南海上的热带气旋被确定达到热带风暴的强度后，即根据命名表给予名称，并同时给予一个四位数字的编号，其中前两位为年份，后两位为顺序号。例如2001就是2020年的1号台风。
+                        如当某个台风造成了特别重大的灾害或人员伤亡而声名狼藉，成为公众知名的台风后，为了防止它与其它的台风同名，台风委员会成员可申请将其使用的名称从命名表中删去，也就是将这个名称永远命名给这次台风，其他台风不再使用这一名称。
+
+                    </div>
+                    <div class="kind">&nbsp; &nbsp;[ <strong>台风种类</strong> ]
+                        热带低压：
+                        风力等级：6～7级 风速数值：10.8～17.1米/秒
+                        热带低压（热带低气压的简称）是热带气旋的一种。属于热带气旋强度最弱的级别（其最大风力为每小时62公里或以下），热带低压是台风形成最重要的起源也是到最后消失的结尾。
+
+                        <br>
+                        热带风暴：
+                        风力等级：8～9级 风速数值：17.2～24.4米/秒
+                        热带风暴，是热带气旋的一种，是指中心附近最大风力达8～9级（17.2～24.4米/秒）的热带气旋，热带风暴的产生预先要有一个弱的热带涡旋存在（热带低压），但热带风暴却为人们带来了丰沛的淡水，热带风暴给中国沿海、日本海沿岸、印度、东南亚和美国东南部带来大量的雨水，约占这些地区总降水量的1/4以上，对改善这些地区的淡水供应和生态环境都有十分重要的意义。
+
+                        <br>
+                        强热带风暴：
+                        风力等级：10～11级 风速数值：24.5～32.6米/秒
+                        强热带风暴是热带气旋的一种。强热带风暴（STS，severe tropical
+                        storm）的底层中心附近最大平均风速为24.5～32.6米/秒，底层中心附近最大风力为10～11级，热带气旋近中心最大风力为10～11级（24.5～32.6米/秒）时，热带风暴加强上去时，就称为强热带风暴。强热带风暴继续加强，就会形成台风。
+                        <br>
+                        台风： 风力等级：12～13级 风速数值：32.7～41.4米/秒
+                        台风是热带气旋的一个类别。在气象学上，按世界气象组织定义：热带气旋中心持续风力在12级至13级（即每秒32.7米至41.4米）称为台风（typhoon）或飓风（hurricane），飓风的名称使用在大西洋及东太平洋；而北太平洋西部（赤道以北，国际日期线以西，东经100度以东）使用的近义字是台风，当台风继续加强上去时就称为强台风。
+
+                        <br>
+                        强台风：
+                        风力等级：14～15级 风速数值：41.5～50.9米/秒
+                        强台风（STY）是指中心附近最大风力14～15级（41.5～50.9米/秒）的热带气旋。当强台风继续加强，会成为超强台风，如果强台风的强度减弱，会成为台风，强台风发生常伴有大暴雨、大海潮、大海啸，发生时，人力不可抗拒，易造成人员伤亡，强台风给广大的地区带来了充足的雨水，成为与人类生活和生产关系密切的降雨系统，但是，强台风也总是带来各种破坏，也是世界上严重的自然灾害。
+
+                        <br>
+                        超强台风：
+                        风力等级：≥16级 风速数值：≥51.0米/秒
+                        超强台风（英语：Super
+                        Typhoon，中国气象局使用缩写SuperTY，香港天文台使用缩写SuperT.）是热带气旋中最强级别。当风速大于51.0米/秒时就称为超强台风、风最高时速可达300公里以上，所到之处，摧枯拉朽，这巨大的能量可以直接给人类造成灾难，这种风力，陆地少见，极具破坏力。在海上，海浪为逾14米或以上的极巨浪，漫天白沫，能见度极低的情况。故超强台风的风力明显更甚，其具有严重灾害性的破坏，是世界上最严重的自然灾害之一。
+
+
+                    </div>
+                    <div class="goobad">
+                        &nbsp; &nbsp;[ <strong>台风利弊</strong>]
+                      虽然台风是人类带来了灾害，但假如没有台风，人类将更加面临更大的灾难。科学研究发现，台风对人类至少有如下几大好处：<br>
+                        其一，随着全球人口激增和工农业发展，对淡水的需求量日益扩大，但陆地上有限的淡水资源分布不均，世界性水荒已日趋严重。
+                        而台风为人们带来了丰沛的淡水。台风给中国沿海、日本海沿岸、印度、东南亚和美国东南部带来大量的雨水，约占这些地区总降水量的1/4以上，
+                        对改善这些地区的淡水供应和生态环境都有十分重要的意义。
+                        其二，靠近赤道的热带、亚热带地区受日照时间最长，干热难忍，如果没有台风来驱散这些地区的热量，那里地表沙荒将更加严重
+                        。同时寒带将会更冷，温带将会消失。我国将没有云南昆明这样的春城，也没有四季长青的岭南，“北大仓”、内蒙古草原亦将不复存在。
+                        其三，台风最高时速可达200公里以上，其能量相当于400颗2000吨级氢弹爆炸时所放出的能量。这巨大的能量可以直接给人类造成灾难，
+                        但也全凭着这巨大的能量流动使地球保持着热平衡。
+                        
+                        其四，台风还能增加捕鱼产量。每当台风吹袭时，会将江海底部的营养物质卷上来，鱼饵增多，吸引鱼群在水面附近聚集，渔获量自然提高。
+                        据统计，包括我国在内的东南亚各国和美国，台风降雨量约占这些地区总降雨量的1/4以上，若没有台风，这些农业困境更大；此外台风对于调剂地球热量、维持热平衡更是功不可没。由于台风的活动，热带地区的热量被驱散到高纬度地区，从而使寒带地区的热量得到补偿，如果没有台风就会造成热带地区气候越来越炎热，而寒带地区越来越寒冷，自然地球上温带也就不复存在了，众多的植物和动物也会因难以适应而将可能出现灭绝。
+                        台风灾害主要是在台风登陆前和登陆之后引起的。台风引起的直接灾害通常由狂风、暴雨、风暴潮三方面造成：
+                        一是狂风，
+                        台风风速大都在17米/秒以上，甚至在60米/秒以上。据测，当风力达到12级时，垂直于风向平面上每平方米风压可达230公斤。因此当超强台风来临时，其带来的狂风及其引起的巨浪可以把沿海船只抛起乃至拦腰折断,也可把巨轮推入内陆；也足以损坏甚至摧毁陆地上的建筑、桥梁、车辆等。特别是在建筑物没有被加固的地区，造成破坏更大。大风也可以把杂物吹到半空并使其高速飞行，危及行人生命财产安全，使户外环境变得非常危险。
+                        二是暴雨，
+                        一次台风登陆，降雨中心一天中可降下100～300毫米，甚至500～800毫米的大暴雨。台风暴雨造成的洪涝灾害，来势凶猛，破坏性极大，是最具危险性的灾害。
+                        三是风暴潮，
+                        当台风移向陆地时，由于台风的强风和低气压的作用，使海水向海岸方向强力堆积，潮位猛涨，水浪排山倒海般向海岸压去。强台风的风暴潮能使沿海水位上升5米～6米。如果风暴潮与天文大潮高潮位相遇，能产生高频率的潮位，导致潮水漫溢，海堤溃决，冲毁房屋和各类建筑设施，淹没城镇和农田，造成大量人员伤亡和财产损失。
+                        另外台风的这些灾害极易诱发城市内涝、房屋倒塌、山洪、泥石流等次生灾害。
+
+                    </div>
+                    <div class="protation">&nbsp; &nbsp;[ <strong>防台措施</strong> ]<br>
+                        1.及时收听、收看或上网查阅台风预警信息，了解政府的防台行动对策。<br>
+                        2.关紧门窗，紧固易被风吹动的搭建物。<br>
+                        3.从危旧房屋中转移至安全处。<br>
+                        4.处于可能受淹的低洼地区的人要及时转移。<br>
+                        5.检查电路、炉火、煤气等设施是否安全。<br>
+                        6.幼儿园、学校应采取暂避措施，必要时停课。<br>
+                        7.尽量不要外出，如果在外面，则不要在临时建筑物、广告牌、铁塔、大树等附近避风避雨。<br>
+                        8.如果在开车的话，则应立即将车开到地下停车场或隐蔽处。<br>
+                        9.如果住在帐篷里，则应立即收起帐篷，到坚固结实的房屋中避风。<br>
+                        10.如果在水面上（如游泳），则应立即上岸避风避雨。<br>
+                        11.如果在结实的房屋里，则应小心关好窗户，在窗玻璃上用胶布贴成“米”字图形，以防窗玻璃破碎。<br>
+                        12.如台风加上打雷，则要采取防雷措施。<br>
+                        13.台风过后需要注意环境卫生，注意食物、水的安全。<br>
+                        14.露天集体活动或室内大型集会应及时取消，并做好人员疏散工作。<br>
+                        15.不要到台风经过的地区旅游或到海滩游泳，更不要乘船出海。<br>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/echarts.min.js' %}"></script>
+<script>
+    // 获取所有的 sidetitle 元素
+    const sidetitles = document.querySelectorAll('.sidetitle');
+
+    // 为每个 sidetitle 元素添加点击事件监听器
+    sidetitles.forEach(sidetitle => {
+        sidetitle.addEventListener('click', () => {
+            // 移除所有 sidetitle 元素下的 circle 元素的类
+            sidetitles.forEach(otherSidetitle => {
+                const otherCircle = otherSidetitle.querySelector('.circle');
+                otherCircle.classList.remove('move');
+            });
+            const index = sidetitle.id;
+            console.log(index);
+
+            if (index == "intro") {
+                $(".introduce").css('display', 'block');
+                $(".introduce").siblings().css('display', 'none');
+            }
+            if (index == "kin") {
+                $(".kind").css('display', 'block');
+                $(".kind").siblings().css('display', 'none');
+            }
+            if (index == "gb") {
+                $(".goobad").css('display', 'block');
+                $(".goobad").siblings().css('display', 'none');
+            }
+            if (index == "pro") {
+                $(".protation").css('display', 'block');
+                $(".protation").siblings().css('display', 'none');
+            }
+
+            // // 移除所有同级元素的 "active" 类
+            // siblings.forEach((sibling) => {
+            //     sibling.classList.remove('ac');
+            // });
+
+            // // 给 line1 元素添加 "active" 类
+            // line1.classList.add('ac');
+
+
+
+            // 获取当前 sidetitle 元素下的 circle 元素
+            const circle = sidetitle.querySelector('.circle');
+            // 给 circle 元素添加一个类
+            circle.classList.add('move');
+        });
+    });
+
+    const damenu = document.querySelector('.damenu');
+    const mainbtn = document.querySelector('.mainbtn');
+
+    damenu.addEventListener('mouseover', function () {
+        damenu.classList.add('hover');
+        mainbtn.classList.add('btna');
+
+    });
+
+    damenu.addEventListener('mouseout', function () {
+        damenu.classList.remove('hover');
+        mainbtn.classList.remove('btna');
+
+    });
+    $(".backmain").click(function () {
+        window.location = "{% url 'index' %}"
+    })
+    $(".backknow").click(function () {
+        console.log(111);
+        window.location = "{% url 'dacause' %}"
+    })
+</script>
+<script type="text/javascript">
+    $('document').ready(function () {
+        $("body").css('visibility', 'visible');
+        var localData = [$('#teacher').val(), $('#start').val() + '/' + $('#end').val(), $('#leader').val()]
+        localStorage.setItem("data", localData);
+
+    })
+</script>
+
+
+</html>
