@@ -5,8 +5,15 @@ import requests
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 import pandas as pd
-import pymssql
+import mysql.connector
 import numpy as np
+
+conn = mysql.connector.connect(
+    host="127.0.0.1",
+    user="root",
+    password="123456",
+    database="Typhoon"
+)
 
 
 def index(request):
@@ -14,19 +21,16 @@ def index(request):
 
 
 def rank(request):  # 10-至今年台风登入我国各地排名
-    conn = pymssql.connect(host='localhost', port='1433', user='sa', password='123456', database='Typhoon')
     sqlstr = "SELECT place from 台风登陆记录"
     result = pd.read_sql(sqlstr, conn)
     result = result.applymap(lambda x: x.encode('latin1').decode('gbk') if isinstance(x, str) else x)
     # print(result)
     result_dict = result["place"].value_counts().to_dict()
     # print(result_dict)
-    conn.close()
     return JsonResponse(result_dict, json_dumps_params={'ensure_ascii': False})
 
 
 def variety(request):  # 10-至今年台风种类
-    conn = pymssql.connect(host='localhost', port='1433', user='sa', password='123456', database='Typhoon')
     sqlstr = "SELECT id,强度 from 台风路径"
     result = pd.read_sql(sqlstr, conn)
     result = result.applymap(lambda x: x.encode('latin1').decode('gbk') if isinstance(x, str) else x)
@@ -34,12 +38,10 @@ def variety(request):  # 10-至今年台风种类
     counts.columns = ['id', '强度']
     result1 = counts['强度'].value_counts().to_dict()
     # print(result)
-    conn.close()
     return JsonResponse(result1, json_dumps_params={'ensure_ascii': False})
 
 
 def month(request):  # 10-至今年台风生成月份数量
-    conn = pymssql.connect(host='localhost', port='1433', user='sa', password='123456', database='Typhoon')
     sqlstr = "SELECT id,时间 from 台风路径"
     result = pd.read_sql(sqlstr, conn)
     result['时间'] = pd.to_datetime(result['时间'])
@@ -48,32 +50,26 @@ def month(request):  # 10-至今年台风生成月份数量
     result.columns = ['id', 'month']
     result = result['month'].value_counts().to_dict()
     # print(result)
-    conn.close()
     return JsonResponse(result, json_dumps_params={'ensure_ascii': False})
 
 
 def peoplenum(request):  # 10-至今年每年台风造成死亡人数
-    conn = pymssql.connect(host='localhost', port='1433', user='sa', password='123456', database='Typhoon')
     sqlstr = "SELECT 年份,数值 from 台风相关数据表 where 数据名称 = '死亡或失踪人数'"
     result = pd.read_sql(sqlstr, conn)
     result = result.set_index('年份')['数值'].to_dict()
     # print(result)
-    conn.close()
     return JsonResponse(result, json_dumps_params={'ensure_ascii': False})
 
 
 def moneynum(request):  # 10-至今年每年台风造成至今经济损失
-    conn = pymssql.connect(host='localhost', port='1433', user='sa', password='123456', database='Typhoon')
     sqlstr = "SELECT 年份,数值 from 台风相关数据表 where 数据名称 = '直接经济损失'"
     result = pd.read_sql(sqlstr, conn)
     result = result.set_index('年份')['数值'].to_dict()
     # print(result)
-    conn.close()
     return JsonResponse(result, json_dumps_params={'ensure_ascii': False})
 
 
 def yearnum(request):  # 10-至今年台风生成台风数量
-    conn = pymssql.connect(host='localhost', port='1433', user='sa', password='123456', database='Typhoon')
     sqlstr = "SELECT time,name from 台风登陆记录"
     result = pd.read_sql(sqlstr, conn)
     result = result.applymap(lambda x: x.encode('latin1').decode('gbk') if isinstance(x, str) else x)
@@ -81,12 +77,10 @@ def yearnum(request):  # 10-至今年台风生成台风数量
     result.drop_duplicates(subset=['time', 'name'], inplace=True)
     result = result.groupby('time')['time'].count().to_dict()
     # print(result)
-    conn.close()
     return JsonResponse(result, json_dumps_params={'ensure_ascii': False})
 
 
 def money_mean(request):  # 10-至今年台风每年平均每个台风造成直接经济损失
-    conn = pymssql.connect(host='localhost', port='1433', user='sa', password='123456', database='Typhoon')
     sqlstr = "SELECT 年份,数值 from 台风相关数据表 where 数据名称 = '直接经济损失'"
     result1 = pd.read_sql(sqlstr, conn)
     result1.columns = ['time', 'num']
@@ -100,13 +94,11 @@ def money_mean(request):  # 10-至今年台风每年平均每个台风造成直�
     result['mean'] = round(result['num_x'].div(result['num_y']), 1)
     result = result.drop(['num_x', 'num_y'], axis=1)
     result = result.set_index('time')['mean'].to_dict()
-    conn.close()
     # print(result)
     return JsonResponse(result, json_dumps_params={'ensure_ascii': False})
 
 
 def people_mean(request):  # 10-至今年台风每年平均每个台风造成人员伤亡
-    conn = pymssql.connect(host='localhost', port='1433', user='sa', password='123456', database='Typhoon')
     sqlstr = "SELECT 年份,数值 from 台风相关数据表 where 数据名称 = '死亡或失踪人数'"
     result1 = pd.read_sql(sqlstr, conn)
     result1.columns = ['time', 'num']
@@ -119,13 +111,11 @@ def people_mean(request):  # 10-至今年台风每年平均每个台风造成人
     result = pd.merge(result1, result2, on='time')
     result['mean'] = round(result['num_x'].div(result['num_y']), 1)
     result = result.drop(['num_x', 'num_y'], axis=1).set_index('time')['mean'].to_dict()
-    conn.close()
     # print(result)
     return JsonResponse(result, json_dumps_params={'ensure_ascii': False})
 
 
 def Intensity(request):  # 10-至今年台风每年台风强度
-    conn = pymssql.connect(host='localhost', port='1433', user='sa', password='123456', database='Typhoon')
     sqlstr = "SELECT id,时间,风速 from 台风路径"
     result = pd.read_sql(sqlstr, conn)
     result['year'] = pd.DatetimeIndex(result['时间']).year
@@ -139,7 +129,6 @@ def Intensity(request):  # 10-至今年台风每年台风强度
         level_index = np.digitize(avg_speed, bins)
         result[year] = labels[level_index - 1]  # 注意index从1开始
     # print(result)
-    conn.close()
     return JsonResponse(result, json_dumps_params={'ensure_ascii': False})
 
 

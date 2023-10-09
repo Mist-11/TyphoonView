@@ -25,11 +25,24 @@ def main():
     execute_from_command_line(sys.argv)
 
 
+flag = 1  # 0初始模式，1实时模式，2怀旧模式
+
 if __name__ == '__main__':
-    # p1 = multiprocessing.Process(target=main)
-    # p2 = multiprocessing.Process(target=GoodWay.data2023)
-    # p1.start()
-    # p2.start()
-    # p1.join()
-    # p2.join()
-    main()
+    if flag == 0:
+        from GoodWay import data2022to2023
+        data2022to2023()
+        p1 = multiprocessing.Process(target=main)
+        p2 = multiprocessing.Process(target=GoodWay.data2023)
+        p1.start()
+        p2.start()
+        p1.join()
+        p2.join()
+    if flag == 1:
+        p1 = multiprocessing.Process(target=main)
+        p2 = multiprocessing.Process(target=GoodWay.data2023)
+        p1.start()
+        p2.start()
+        p1.join()
+        p2.join()
+    if flag == 2:
+        main()

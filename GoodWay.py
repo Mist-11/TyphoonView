@@ -5,9 +5,17 @@ from collections import defaultdict
 import requests
 import time
 import pandas as pd
-import pymssql
+import mysql.connector
 from django.http import JsonResponse
 import os
+
+conn = mysql.connector.connect(
+    host="127.0.0.1",
+    user="root",
+    password="123456",
+    database="Typhoon"
+)
+cursor = conn.cursor()
 
 
 def tianchong(x, y):  # 自动相关信息，填充列表，匹配dataframe的
@@ -21,7 +29,6 @@ def get_html(headers, year):
     t = int(round(time.time() * 1000))
     url = "http://typhoon.nmc.cn/weatherservice/typhoon/jsons/list_%s?t=%s&callback=typhoon_jsons_list_%s" % (
         str(year), t, str(year))
-    conn = pymssql.connect(host='localhost', port='1433', user='sa', password='123456', database='Typhoon')
     db = conn.cursor()  # 获取游标
     html_obj = requests.get(url, headers=headers, verify=False).text
     date = json.loads(re.match(".*?({.*}).*", html_obj, re.S).group(1))['typhoonList']
@@ -46,7 +53,6 @@ def get_html(headers, year):
             except:
                 continue
     conn.commit()  # 提交数据
-    conn.close()  # 关闭数据库
     return item_list
 
 
@@ -62,7 +68,6 @@ def rep(rawstr, dict_rep):
 
 
 def get_xiang(item, headers):
-    conn = pymssql.connect(host='localhost', port='1433', user='sa', password='123456', database='Typhoon')
     db = conn.cursor()  # 获取游标
     for i in range(len(item)):
         print("开始抓取%s 台风信息, id: %s" % (item[i]['ChineseName'], item[i]['id']))
@@ -109,21 +114,18 @@ def get_xiang(item, headers):
                 # print(sqlstr)
                 db.execute(sqlstr)
             except:
-                # print("出错")
+                print("出错")
                 continue
     conn.commit()  # 提交数据
-    conn.close()  # 关闭数据库
     return data
 
 
 def goodway(year, tf_id):
-    conn = pymssql.connect(host='localhost', port='1433', user='sa', password='123456', database='Typhoon')
     sqlstr = "SELECT id,name,时间,风速,移向,强度,中心位置,中心气压,年份 " \
              "from 台风路径 " \
              "where 台风路径.年份 = " + "'" + str(year) + "'" \
-                                                          "and id = " + "'" + str(tf_id) + "'"
+             "and id = " + "'" + str(tf_id) + "'"
     result = pd.read_sql(sqlstr, conn)
-    result = result.applymap(lambda x: x.encode('latin1').decode('gbk') if isinstance(x, str) else x)
     # print(result)
     result = result.rename(
         columns={'时间': 'time', '风速': 'speed', '移向': 'move', '强度': 'strength', '中心位置': 'position',
@@ -145,21 +147,17 @@ def goodway(year, tf_id):
         if id_value not in new_dict:
             new_dict[id_value] = {}  # 如果id不在新字典中，则创建一个新的键值对
         new_dict[id_value][key] = value  # 将原字典中的键值对添加到新字典中对应的id键下面的子字典中
-    conn.close()
     # print(new_dict)
     return JsonResponse(new_dict, json_dumps_params={'ensure_ascii': False})
 
 
 def getlist(year):
-    conn = pymssql.connect(host='localhost', port='1433', user='sa', password='123456', database='Typhoon')
     sqlstr = "SELECT * from 台风汇总信息 where 年份=" + "'" + str(year) + "'"
     result = pd.read_sql(sqlstr, conn)
-    result = result.applymap(lambda x: x.encode('latin1').decode('gbk') if isinstance(x, str) else x)
     result = result.rename(
         columns={'台风编号': 'id', '年份': 'year', '年份编号': 'YearNo', '中文名': 'Cname', '英文名': 'Ename',
                  '描述': 'dec'})
     d = result.to_dict(orient='index')
-    conn.close()
     return JsonResponse(d, json_dumps_params={'ensure_ascii': False})
 
 
