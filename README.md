@@ -2,7 +2,7 @@
 一个台风可视化系统  
  - 服务端使用了django
  - 前端除了基本三件套，还使用了echats
- - 数据库是SQLserver
+ - 数据库是~~SQLserver~~（已经改为了MYSQL）
 写着蛮玩玩  
 
  ---  
